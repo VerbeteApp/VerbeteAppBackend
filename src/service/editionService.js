@@ -1,1 +1,0 @@
-const editionDatabase = require();

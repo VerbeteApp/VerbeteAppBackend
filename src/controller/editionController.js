@@ -1,1 +1,1 @@
-const editionService = require();
+const editionService = require("../services/editionService");
