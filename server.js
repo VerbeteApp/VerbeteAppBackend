@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const connectDB = require('./src/config/database');
 
 require('./src/cron/syncNews');
 
@@ -9,9 +9,9 @@ const editionRouter = require("./src/router/editionRouter");
 const app = express();
 const port = 3000;
 
-const MONGO_URI = process.env.MONGO_URI;
-
 app.use(express.json());
+
+app.use('/api', editionRouter);
 
 app.get('/', (req, res) => {
     setTimeout(() => {
@@ -20,12 +20,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.use('/api', editionRouter);
-
-
-
-///TODO: Move this structure to config file and just import a function
-mongoose.connect(MONGO_URI)
+connectDB()
     .then(()=> {
         console.log('MongoDB connected');
 

@@ -1,6 +1,7 @@
 const editionService = require("../services/editionService");
 
 
+//Usa o service de pegar as ultimas edições do banco
 const getLatestEdition = async (req, res) => {
     console.log('--- PEDIDO CHEGOU AO CONTROLLER! ---');
 
