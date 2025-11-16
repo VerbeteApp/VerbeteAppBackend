@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const EditionSchema = new mongoose.Schema({
     date: { type: String, require: true },
     category: [
         {
             name: {type: String, require: true},
-            articles: [
+            news: [
                 {
                     title: String,
                     description: String,
@@ -23,4 +23,4 @@ const EditionSchema = new mongoose.Schema({
     ]
 }, {timestamps: true});
 
-export default mongoose.model("Edition", EditionSchema);
+module.exports = mongoose.model("Edition", EditionSchema);

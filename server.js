@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 
+const fetchAndSaveEdition = require('./src/services/editionService');
+
 const editionRouter = require("./src/router/editionRouter");
 
 const app = express();
@@ -24,6 +26,9 @@ app.get('/', (req, res) => {
 mongoose.connect(MONGO_URI)
     .then(()=> {
         console.log('MongoDB connected');
+
+        console.log('EXECUTANDO TESTE DE BUSCA E SALVAMENTO...');
+        fetchAndSaveEdition();
 
         app.listen(port, () =>{
             console.log(`API running on port ${port}`)
