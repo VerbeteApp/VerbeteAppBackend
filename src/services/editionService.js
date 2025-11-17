@@ -1,6 +1,8 @@
 const axios = require('axios');
 const Edition = require('../models/Edition');
 
+
+//Essa função será chamada apenas pelo cron
 const fetchAndSaveEdition = async () => {
     console.log("Searching for latest news...");
 
@@ -75,5 +77,8 @@ const getLatestFromDB = async () => {
         console.error("Error trying to find latest edition:", error)
     }
 };
+
+
+
 
 module.exports = {fetchAndSaveEdition, getLatestFromDB};
