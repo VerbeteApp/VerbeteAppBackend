@@ -1,26 +1,32 @@
 const mongoose = require("mongoose");
 
+const NewsSchema = require('./schemas/NewsSchema');
+const SudokuSchema = require('./schemas/SudokuSchema');
+const WeatherSchema = require('./schemas/WeatherSchema');
+const HoroscopeSchema = require('./schemas/HoroscopeSchema');
+const StampSchema = require('./schemas/StampSchema');
+const WordSearchSchema = require('./schemas/WordSearchSchema');
+
 const EditionSchema = new mongoose.Schema({
-    date: { type: String, require: true },
-    category: [
-        {
-            name: {type: String, require: true},
-            news: [
-                {
-                    title: String,
-                    description: String,
-                    content: String,
-                    url: String,
-                    image: String,
-                    author: String,
-                    publishedAt: String,
-                    source: {
-                        name: String
-                    }
-                }
-            ]
-        }
-    ]
+    date: { type: Date, required: true, unique: true, index: true },
+    edition_number: { type: Number, required: true, unique: true },
+    news: [NewsSchema],
+    word_game: String,
+    sudoku_game: SudokuSchema,
+    word_search_game: WordSearchSchema,
+    horoscope: [HoroscopeSchema],
+    weather_forecast: WeatherSchema,
+    texture: String,
+    stamp: StampSchema
 }, {timestamps: true});
+
+EditionSchema.statics.getSummary = function() {
+  return this.find({}, { 
+    date: 1, 
+    edition_number: 1, 
+    texture: 1, 
+    _id: 1 
+  }).sort({ date: -1 });
+};
 
 module.exports = mongoose.model("Edition", EditionSchema);
