@@ -15,7 +15,7 @@ const EditionSchema = new mongoose.Schema({
     sudoku_game: { type: SudokuSchema, required: false },
     word_search_game: { type: WordSearchSchema, required: false },
     horoscope: { type: [HoroscopeSchema], required: false },
-    weather_forecast: { type: weather_forecast, required: false },
+    weather_forecast: { type: WeatherSchema, required: false },
     texture: { type: String, required: false },
     stamp: { type: StampSchema, required: false }
 }, {timestamps: true});

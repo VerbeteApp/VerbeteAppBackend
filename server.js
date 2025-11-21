@@ -6,12 +6,15 @@ require('./src/cron/syncNews');
 
 const editionRouter = require("./src/router/editionRouter");
 
+const horoscopeRouter = require('./src/router/horoscopeRouter')
+
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
 app.use('/api', editionRouter);
+app.use('/api', horoscopeRouter);
 
 app.get('/', (req, res) => {
     setTimeout(() => {

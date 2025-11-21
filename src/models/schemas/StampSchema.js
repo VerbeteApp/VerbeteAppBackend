@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { collection } = require('../Edition');
+
 
 const StampSchema = new mongoose.Schema({
     collection_id: { type: Number, required: true },

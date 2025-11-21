@@ -10,6 +10,4 @@ router.get('/latest', getLatestEdition);
 router.get('/fetchAndSync', fetchNewsFromExtAPI)
 
 
-//
-
 module.exports = router;
