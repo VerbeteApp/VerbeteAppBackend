@@ -11,13 +11,13 @@ const EditionSchema = new mongoose.Schema({
     date: { type: Date, required: true, unique: true, index: true },
     edition_number: { type: Number, required: true, unique: true },
     news: [NewsSchema],
-    word_game: String,
-    sudoku_game: SudokuSchema,
-    word_search_game: WordSearchSchema,
-    horoscope: [HoroscopeSchema],
-    weather_forecast: WeatherSchema,
-    texture: String,
-    stamp: StampSchema
+    word_game: { type: String, required: false },
+    sudoku_game: { type: SudokuSchema, required: false },
+    word_search_game: { type: WordSearchSchema, required: false },
+    horoscope: { type: [HoroscopeSchema], required: false },
+    weather_forecast: { type: weather_forecast, required: false },
+    texture: { type: String, required: false },
+    stamp: { type: StampSchema, required: false }
 }, {timestamps: true});
 
 EditionSchema.statics.getSummary = function() {
