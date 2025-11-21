@@ -5,7 +5,7 @@ const connectDB = require('./src/config/database');
 require('./src/cron/syncNews');
 
 const editionRouter = require("./src/router/editionRouter");
-
+const newsRouter = require("./src/router/newsRouter");
 const horoscopeRouter = require('./src/router/horoscopeRouter')
 
 const app = express();
@@ -15,6 +15,8 @@ app.use(express.json());
 
 app.use('/api', editionRouter);
 app.use('/api', horoscopeRouter);
+app.use('/api', newsRouter);
+
 
 app.get('/', (req, res) => {
     setTimeout(() => {

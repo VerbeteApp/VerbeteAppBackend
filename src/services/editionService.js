@@ -1,6 +1,7 @@
 const Edition = require('../models/Edition');
 const newsService = require('./newsService');
 const horoscopeService = require('./horoscopeService');
+const wordGameService = require('./wordGameService');
 
 
 //Essa função será chamada apenas pelo cron
@@ -14,6 +15,9 @@ const fetchAndSaveEdition = async () => {
             horoscopeService.getAllDailyHoroscopeInPortuguese()
         ]);
 
+        const dailyWord = wordGameService.getDailyWord();
+        console.log(`Edition's word: ${dailyWord}`);
+
         const lastEdition = await Edition.findOne().sort({ edition_number: -1 });
         const nextEditionNum = lastEdition ? lastEdition.edition_number + 1 : 1;
 
@@ -24,10 +28,13 @@ const fetchAndSaveEdition = async () => {
             edition_number: nextEditionNum,
             news: newsData,
             horoscope: horoscopeData,
+            word_game: dailyWord,
         });
 
         await newEdition.save();
         console.log('EDITION CREATED AND SUCESSFULLY SAVE!!!!!')
+        return newEdition;
+
 
 
     } catch(error) {
