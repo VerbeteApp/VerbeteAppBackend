@@ -6,7 +6,6 @@ const Edition = require('../models/Edition');
 const fetchAndSaveEdition = async () => {
     console.log("Searching for latest news...");
 
-    const categoriesToFetch = ['games', 'apple', 'tecnologia', 'economia'];
     const categoriesForDatabase = []; //"container" para juntar os resultados
 
     try{
@@ -21,6 +20,8 @@ const fetchAndSaveEdition = async () => {
             {
                 params: {
                     apiKey: apiKey,
+                    //NÃO PODE TER ESSAS PALAVRAS O FETCH-q%3Apolitica+-governo+-elei%C3%A7%C3%B5es+-crime+-homic%C3%ADdio+-assassinato+-tr%C3%A1fico+-trag%C3%A9dia+-acidente+-pornografia+-sexo+-adulto+-homofobia+-racismo+-xenofobia+-misoginia+-viol%C3%AAncia+-guerra+-conflito+-tabloide+-fofoca+-celebridades+-esc%C3%A2ndalo
+
                         q: categoryName, // Usamos 'q' (palavra-chave) ao invés de 'category'
                         // 'country' foi removido, pois '/everything' não o suporta bem com 'q'
                         language: 'pt', // É bom especificar o idioma
