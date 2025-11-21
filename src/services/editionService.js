@@ -1,68 +1,39 @@
-const axios = require('axios');
 const Edition = require('../models/Edition');
+const newsService = require('./newsService');
+const horoscopeService = require('./horoscopeService');
 
 
 //Essa função será chamada apenas pelo cron
 const fetchAndSaveEdition = async () => {
-    console.log("Searching for latest news...");
+    console.log("Starting the process to fetch and save a daily edition...");
 
-    const categoriesForDatabase = []; //"container" para juntar os resultados
 
     try{
-    //LUGAR ONDE SERÁ FEITO A REQUISÃO PARA A newsAPI
+        const [newsData, horoscopeData] = await Promise.all([
+            newsService.fetchDailyNews(),
+            horoscopeService.getAllDailyHoroscopeInPortuguese()
+        ]);
 
-    const apiKey = process.env.NEWS_API_KEY;
+        const lastEdition = await Edition.findOne().sort({ edition_number: -1 });
+        const nextEditionNum = lastEdition ? lastEdition.edition_number + 1 : 1;
 
-    for (const categoryName of categoriesToFetch) {
-        console.log(`Searching category: ${categoryName}...`)
-        const response = await axios.get(
-            'https://newsapi.org/v2/everything',
-            {
-                params: {
-                    apiKey: apiKey,
-                    //NÃO PODE TER ESSAS PALAVRAS O FETCH-q%3Apolitica+-governo+-elei%C3%A7%C3%B5es+-crime+-homic%C3%ADdio+-assassinato+-tr%C3%A1fico+-trag%C3%A9dia+-acidente+-pornografia+-sexo+-adulto+-homofobia+-racismo+-xenofobia+-misoginia+-viol%C3%AAncia+-guerra+-conflito+-tabloide+-fofoca+-celebridades+-esc%C3%A2ndalo
+        console.log(`📝 Criando Edição #${nextEditionNum} com ${newsData.length} notícias.`);
 
-                        q: categoryName, // Usamos 'q' (palavra-chave) ao invés de 'category'
-                        // 'country' foi removido, pois '/everything' não o suporta bem com 'q'
-                        language: 'pt', // É bom especificar o idioma
-                        sortBy: 'publishedAt', // Para pegar os mais recentes
-                        pageSize: 20 // 10 notícias por palavra-chave
-                }
-            }
-        );
+        const newEdition = new Edition({
+            date: new Date(),
+            edition_number: nextEditionNum,
+            news: newsData,
+            horoscope: horoscopeData,
+        });
 
-        const newsFromApi = response.data.articles;
-
-        const formattedCategory = {
-            name: categoryName,
-            news: newsFromApi
-        };
-
-        categoriesForDatabase.push(formattedCategory);
-    }
+        await newEdition.save();
+        console.log('EDITION CREATED AND SUCESSFULLY SAVE!!!!!')
 
 
+    } catch(error) {
+        console.error('ERROR TRYING TO SAVE EDITION', error);
+        throw error;
 
-    console.log('All categories searched successfully')
-    console.log(categoriesForDatabase);
-
-    console.log('Categorias buscadas. Preparando para salvar no banco...');
-
-    const newEditionData = {
-        date: new Date(),
-        category: categoriesForDatabase
-    };
-
-    const editioToSave = new Edition(newEditionData)
-
-    await editioToSave.save();
-
-    console.log('🎉 Nova edição salva no banco de dados com sucesso!');
-
-
-
-    } catch (error) {
-        console.error("ERROR trying to fetch or save news:", error.message);
     }
 };
 

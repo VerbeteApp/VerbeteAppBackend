@@ -6,6 +6,7 @@ const NewsSchema = new mongoose.Schema({
     cover_image: String,
     date: { type:Date, default: Date.now },
     author: String,
+    source: String,
     link: String,
     description: String,
     language: { type:String, default: 'pt-br' }

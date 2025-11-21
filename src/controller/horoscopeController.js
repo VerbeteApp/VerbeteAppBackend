@@ -1,6 +1,6 @@
 const horoscopeService = require('../services/horoscopeService');
 
-//vai usar o service para pegar as últimas edições do banco
+
 const getAllHoroscope = async (req, res) => {
     try{
         const dailyHoroscope = await horoscopeService.getAllDailyHoroscopeInPortuguese();

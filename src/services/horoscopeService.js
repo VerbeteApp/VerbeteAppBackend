@@ -77,6 +77,10 @@ const getAllDailyHoroscopeInPortuguese = async () => {
     }
 }
 
+
+//TODO: CRIAR FUNÇÃO PARA BUSCAR NO BANCO AS PREVISÕES DO HOROSCOPO
+
+
 module.exports = {
     getDailyHoroscopeInPortuguese,
     getAllDailyHoroscopeInPortuguese
