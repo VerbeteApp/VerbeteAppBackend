@@ -4,10 +4,10 @@ const connectDB = require('./src/config/database');
 
 require('./src/cron/syncNews');
 
-const editionRouter = require("./src/router/editionRouter");
-const newsRouter = require("./src/router/newsRouter");
-const horoscopeRouter = require('./src/router/horoscopeRouter');
-const wordGameController = require('./src/router/wordGameRouter');
+const editionRouter = require("./src/routes/editionRoutes");
+const newsRouter = require("./src/routes/newsRoutes");
+const horoscopeRouter = require('./src/routes/horoscopeRoutes');
+const wordGameController = require('./src/routes/wordGameRoutes');
 
 const app = express();
 const port = 3000;
