@@ -13,6 +13,26 @@ const fetchNewsFromExtAPI = async (req,res) => {
 
 }
 
+
+const getDailyNews = async(req, res) => {
+    try {
+        const latestNews = await newsService.getDailyNewsFromDB();
+
+        if (!latestNews) {
+            return res.status(404).json({message: 'No horoscope found'});
+        }
+
+        res.status(200).json(latestNews);
+        
+    } catch (error) {
+        console.error("Error trying to get latest news", error)
+        res.status(500).json({ message: "Internal error" })
+    }
+}
+
+
+
 module.exports = {
-    fetchNewsFromExtAPI
+    fetchNewsFromExtAPI,
+    getDailyNews
 };

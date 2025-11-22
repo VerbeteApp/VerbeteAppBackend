@@ -15,7 +15,7 @@ const fetchAndSaveEdition = async () => {
             horoscopeService.getAllDailyHoroscopeInPortuguese()
         ]);
 
-        const dailyWord = wordGameService.getDailyWord();
+        const dailyWord = wordGameService.fetchDailyWordFromArray();
         console.log(`Edition's word: ${dailyWord}`);
 
         const lastEdition = await Edition.findOne().sort({ edition_number: -1 });

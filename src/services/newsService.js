@@ -1,4 +1,6 @@
 const axios = require("axios");
+const Edition = require('../models/Edition');
+
 
 const NEGATIVE_KEYWORDS = [
   "morte",
@@ -22,7 +24,7 @@ const NEGATIVE_KEYWORDS = [
   "bola"
 ];
 
-
+//FETCH NEWS IN EXTERNAL API
 const fetchDailyNews = async () => {
     const apiKey = process.env.NEWS_API_KEY;
     const excludeQuery = `(${NEGATIVE_KEYWORDS.join(" OR ")})`;
@@ -71,4 +73,28 @@ const fetchDailyNews = async () => {
     }
 };
 
-module.exports = { fetchDailyNews };
+//GET ALL THE NEWS IN DATABASE
+const getDailyNewsFromDB = async () => {
+    console.log("Searching news in database...")
+    try {
+        const latestEdition = await Edition.findOne()
+            .sort({date: -1})
+            .select('news')
+            .exec();
+
+        if (!latestEdition){
+            console.log("No edtion found");
+            return null;
+        }
+        
+        return latestEdition.news;
+
+    } catch (error) {
+        console.error("Error trying to find latest horoscope in DataBase", error);
+        throw error;
+    }
+}
+
+
+
+module.exports = { fetchDailyNews, getDailyNewsFromDB };

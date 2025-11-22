@@ -6,16 +6,18 @@ require('./src/cron/syncNews');
 
 const editionRouter = require("./src/router/editionRouter");
 const newsRouter = require("./src/router/newsRouter");
-const horoscopeRouter = require('./src/router/horoscopeRouter')
+const horoscopeRouter = require('./src/router/horoscopeRouter');
+const wordGameController = require('./src/router/wordGameRouter');
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
-app.use('/api', editionRouter);
-app.use('/api', horoscopeRouter);
-app.use('/api', newsRouter);
+app.use('/api/edition', editionRouter);
+app.use('/api/horoscope', horoscopeRouter);
+app.use('/api/news', newsRouter);
+app.use('/api/wordGame', wordGameController);
 
 
 app.get('/', (req, res) => {

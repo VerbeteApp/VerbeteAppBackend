@@ -1,10 +1,10 @@
-const express = require ('express');
+const express = require("express");
 const router = express.Router();
 
-const { getAllHoroscope } = require('../controller/horoscopeController');
+const horoscopeController = require("../controller/horoscopeController");
 
-router.get('/allHoroscope', getAllHoroscope);
+router.get("/", horoscopeController.getAllHoroscope);
 
-//TODO: CRIAR UM ENDPOINT PARA PEGAR HOROSCOPE POR SIGNO
+router.get("/:sign", horoscopeController.getHoroscopeBySign);
 
 module.exports = router;

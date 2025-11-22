@@ -1,6 +1,8 @@
 const axios = require('axios');
 const translate = require('translate').default;
-// console.log('🕵️ BIBLIOTECA TRANSLATE:', translate);
+const Edition = require('../models/Edition');
+
+
 
 const signs = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
     "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
@@ -21,6 +23,7 @@ const signTranslations = {
     "Pisces": "peixes"
 };
 
+//FETCH A SIGN IN EXTERNAL API
 const getDailyHoroscope = async (sign) => {
     console.log(`Getting horoscope for ${sign}...`);
     try{
@@ -40,6 +43,7 @@ const getDailyHoroscope = async (sign) => {
     }
 };
 
+//TRANSLATE SIGN BY SIGN USING THE GETDAILYHOROSCOPE FUNC
 const getDailyHoroscopeInPortuguese = async (sign) => {
     try{
         const dailyHoroscope = await getDailyHoroscope(sign);
@@ -56,6 +60,7 @@ const getDailyHoroscopeInPortuguese = async (sign) => {
     }
 }
 
+//GET ALL THE SIGNS USING getDailyHoroscopeInPortuguese AND CREATE AN ARRAY USING MAP
 const getAllDailyHoroscopeInPortuguese = async () => {
     try{
         const today = new Date();
@@ -78,10 +83,59 @@ const getAllDailyHoroscopeInPortuguese = async () => {
 }
 
 
-//TODO: CRIAR FUNÇÃO PARA BUSCAR NO BANCO AS PREVISÕES DO HOROSCOPO
+
+//GET ALL THE HOROSCOPE IN DB
+const getAllHoroscopeFromDB = async () => {
+    console.log('Searching latest horoscope in database...');
+    try {
+        const latestEdition = await Edition.findOne()
+        .sort({date: -1})
+        .select('horoscope')
+        .exec();
+
+        if (!latestEdition){
+            console.log("No edtion found");
+            return null;
+        }
+
+        return latestEdition.horoscope;
+
+        
+    } catch (error) {
+        console.error("Error trying to find latest horoscope in DataBase", error);
+    }
+};
+
+//GET THE SIGN IN DB
+const getHoroscopeBySignFromDB = async(signName) => {
+    console.log(`Searching by ${signName} sign in database...`);
+
+    try {
+        const latestEdition = await Edition.findOne()
+        .sort({date:-1})
+        .select('horoscope')
+        .exec();
+
+        if (!latestEdition){
+            console.log("No horoscope found");
+            return null;
+        }
+
+        const foundSign = latestEdition.horoscope.find(item => item.sign === signName.toLowerCase());
+
+        return foundSign;
+
+    } catch (error) {
+        console.error("Error trying to find sign in DB:", error);
+        throw error;
+    }
+};
+
+
 
 
 module.exports = {
-    getDailyHoroscopeInPortuguese,
-    getAllDailyHoroscopeInPortuguese
+    getAllDailyHoroscopeInPortuguese,
+    getAllHoroscopeFromDB,
+    getHoroscopeBySignFromDB
 }
