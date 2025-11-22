@@ -58,6 +58,18 @@ const getLatestFromDB = async () => {
 };
 
 
+const getAllEditionsSummary = async () => {
+    console.log("Fetching editions summary...");
+    try {
+        const summary = await Edition.getSummary();
+        return summary;
+    } catch (error) {
+        console.error("Error fetching editions summary:", error);
+        throw error;
+    }
+};
 
 
-module.exports = {fetchAndSaveEdition, getLatestFromDB};
+
+
+module.exports = {fetchAndSaveEdition, getLatestFromDB, getAllEditionsSummary};

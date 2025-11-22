@@ -38,10 +38,21 @@ const fetchAndSaveEdition = async (req, res) => {
 };
 
 
+const getEditionsSummary = async (req, res) => {
+    try {
+        const summary = await editionService.getAllEditionsSummary();
+        res.status(200).json(summary);
+    } catch (error) {
+        console.error("Error getting editions summary:", error);
+        res.status(500).json({ message: "Internal error" });
+    }
+};
+
 
 
 module.exports = {
     getLatestEdition,
-    fetchAndSaveEdition
+    fetchAndSaveEdition,
+    getEditionsSummary
 };
 
