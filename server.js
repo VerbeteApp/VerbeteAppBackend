@@ -8,6 +8,7 @@ const editionRouter = require("./src/routes/editionRoutes");
 const newsRouter = require("./src/routes/newsRoutes");
 const horoscopeRouter = require('./src/routes/horoscopeRoutes');
 const wordGameController = require('./src/routes/wordGameRoutes');
+const wordSearchRouter = require('./src/routes/wordSearchGameRoutes');
 
 const app = express();
 const port = 3000;
@@ -18,6 +19,7 @@ app.use('/api/edition', editionRouter);
 app.use('/api/horoscope', horoscopeRouter);
 app.use('/api/news', newsRouter);
 app.use('/api/wordGame', wordGameController);
+app.use('/api/wordSearch', wordSearchRouter);
 
 
 app.get('/', (req, res) => {

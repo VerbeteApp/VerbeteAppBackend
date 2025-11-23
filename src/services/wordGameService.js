@@ -1,4 +1,4 @@
-const wordList = require('../data/wordList');
+const wordList = require('../data/5charWordList');
 const Edition = require('../models/Edition')
 
 const fetchDailyWordFromArray = () => {

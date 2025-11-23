@@ -62,23 +62,58 @@ const getDailyHoroscopeInPortuguese = async (sign) => {
 
 //GET ALL THE SIGNS USING getDailyHoroscopeInPortuguese AND CREATE AN ARRAY USING MAP
 const getAllDailyHoroscopeInPortuguese = async () => {
-    try{
+    console.log("Starting to fetch all horoscopes with fallback strategy...");
+    try {
         const today = new Date();
 
+        // 1. Busca a edição anterior no banco para usar como "Plano B"
+        const latestEdition = await Edition.findOne()
+            .sort({ date: -1 })
+            .select('horoscope')
+            .lean(); 
+
+        const previousHoroscopes = latestEdition ? latestEdition.horoscope : [];
+
         const HoroscopePromises = signs.map(async (sign) => {
-            const message = await getDailyHoroscopeInPortuguese(sign);
+            const signPt = signTranslations[sign];
+            let message = null;
+
+            // 2. Tenta buscar na API externa e traduzir
+            try {
+                const result = await getDailyHoroscopeInPortuguese(sign);
+                if (result && result !== 'Horoscope unavailable at moment') {
+                    message = result;
+                }
+            } catch (error) {
+                console.warn(`⚠️ Failed to fetch/translate for ${sign}. Trying fallback...`);
+            }
+
+            if (!message) {
+                
+                const backup = previousHoroscopes.find(h => h.sign === signPt);
+                
+                if (backup && backup.message) {
+                    console.log(`♻️ Using cached message for ${sign}`);
+                    message = backup.message;
+                } else {
+                    
+                    message = "As estrelas estão silenciosas hoje. Tente novamente amanhã.";
+                }
+            }
+
             return {
-                sign: signTranslations[sign],
-                date: today,
+                sign: signPt,
+                date: today, // Salvamos com a data de HOJE, mesmo sendo texto antigo
                 message: message
             };
         });
 
         const horoscope = await Promise.all(HoroscopePromises);
         return horoscope;
-    } catch(error){
-        console.error('Error fetching all horoscopes', error);
-        throw error;
+
+    } catch (error) {
+        console.error('CRITICAL ERROR fetching all horoscopes', error);
+        return [];
     }
 }
 

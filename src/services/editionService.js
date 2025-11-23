@@ -2,6 +2,7 @@ const Edition = require('../models/Edition');
 const newsService = require('./newsService');
 const horoscopeService = require('./horoscopeService');
 const wordGameService = require('./wordGameService');
+const wordSearchService = require('./wordSearchService');
 
 
 //Essa função será chamada apenas pelo cron
@@ -18,6 +19,10 @@ const fetchAndSaveEdition = async () => {
         const dailyWord = wordGameService.fetchDailyWordFromArray();
         console.log(`Edition's word: ${dailyWord}`);
 
+        const dailyWordSearch = wordSearchService.generateWordSearch();
+        console.log(`Word Search generated with ${dailyWordSearch.words.length} words.`);
+
+
         const lastEdition = await Edition.findOne().sort({ edition_number: -1 });
         const nextEditionNum = lastEdition ? lastEdition.edition_number + 1 : 1;
 
@@ -29,6 +34,7 @@ const fetchAndSaveEdition = async () => {
             news: newsData,
             horoscope: horoscopeData,
             word_game: dailyWord,
+            word_search_game: dailyWordSearch
         });
 
         await newEdition.save();
