@@ -134,7 +134,7 @@ const generateWordSearch = () => {
 
 const getWordSearchByEditionNumber = async (editionNumber) => {
   console.log(
-    "Searching for word in Word Search Game in Edition #",
+    "Searching for data in Word Search Game in Edition #",
     editionNumber
   );
 
