@@ -1,4 +1,5 @@
 const wordList = require("../data/wordSearchList");
+const Edition = require("../models/Edition");
 
 const gridSize = 12;
 const numWords = 8;
@@ -66,68 +67,91 @@ const fillEmptyCells = (grid) => {
 
 // --- FUNÇÃO PRINCIPAL ---
 const generateWordSearch = () => {
-    const grid = createEmptyGrid();
-    const selectedWords = getRandomWords(numWords);
-    const placedWordsInfo = [];
+  const grid = createEmptyGrid();
+  const selectedWords = getRandomWords(numWords);
+  const placedWordsInfo = [];
 
-    // 1. Sorteia EXATAMENTE 2 índices únicos para serem invertidos
-    const indicesToReverse = new Set();
-    
-    // Proteção simples caso numWords seja alterado para menos de 2 no futuro
-    const targetReversedCount = Math.min(2, selectedWords.length);
+  // 1. Sorteia EXATAMENTE 2 índices únicos para serem invertidos
+  const indicesToReverse = new Set();
 
-    while (indicesToReverse.size < targetReversedCount) {
-        const randomIndex = Math.floor(Math.random() * selectedWords.length);
-        indicesToReverse.add(randomIndex);
+  // Proteção simples caso numWords seja alterado para menos de 2 no futuro
+  const targetReversedCount = Math.min(2, selectedWords.length);
+
+  while (indicesToReverse.size < targetReversedCount) {
+    const randomIndex = Math.floor(Math.random() * selectedWords.length);
+    indicesToReverse.add(randomIndex);
+  }
+
+  for (let i = 0; i < selectedWords.length; i++) {
+    const word = selectedWords[i];
+    let placed = false;
+    let attempts = 0;
+    const maxAttempts = 100;
+
+    // 2. A palavra só é invertida se o índice dela foi sorteado.
+    // REMOVEMOS o "|| Math.random() < 0.3" para garantir o limite de 2.
+    const isReversed = indicesToReverse.has(i);
+
+    while (!placed && attempts < maxAttempts) {
+      const startX = Math.floor(Math.random() * gridSize);
+      const startY = Math.floor(Math.random() * gridSize);
+      const baseDirection =
+        DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
+
+      // Se isReversed for true, multiplica por -1 (inverte). Se for false, mantém 1.
+      const stepMultiplier = isReversed ? -1 : 1;
+
+      const direction = {
+        x: baseDirection.x * stepMultiplier,
+        y: baseDirection.y * stepMultiplier,
+      };
+
+      if (checkPlacement(grid, word, startX, startY, direction)) {
+        placeWord(grid, word, startX, startY, direction);
+
+        placedWordsInfo.push({
+          word: word,
+          direction: baseDirection.name,
+          initial_pos: [startX, startY],
+          is_reversed: isReversed,
+        });
+
+        placed = true;
+      }
+      attempts++;
     }
+  }
 
-    for (let i = 0; i < selectedWords.length; i++) {
-        const word = selectedWords[i];
-        let placed = false;
-        let attempts = 0;
-        const maxAttempts = 100;
+  fillEmptyCells(grid);
 
-        // 2. A palavra só é invertida se o índice dela foi sorteado.
-        // REMOVEMOS o "|| Math.random() < 0.3" para garantir o limite de 2.
-        const isReversed = indicesToReverse.has(i);
+  const formattedRows = grid.map((row) => row.join(""));
 
-        while (!placed && attempts < maxAttempts) {
-            const startX = Math.floor(Math.random() * gridSize);
-            const startY = Math.floor(Math.random() * gridSize);
-            const baseDirection = DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
-
-            // Se isReversed for true, multiplica por -1 (inverte). Se for false, mantém 1.
-            const stepMultiplier = isReversed ? -1 : 1;
-            
-            const direction = {
-                x: baseDirection.x * stepMultiplier,
-                y: baseDirection.y * stepMultiplier
-            };
-
-            if (checkPlacement(grid, word, startX, startY, direction)) {
-                placeWord(grid, word, startX, startY, direction);
-                
-                placedWordsInfo.push({
-                    word: word,
-                    direction: baseDirection.name,
-                    initial_pos: [startX, startY],
-                    is_reversed: isReversed
-                });
-                
-                placed = true;
-            }
-            attempts++;
-        }
-    }
-
-    fillEmptyCells(grid);
-
-    const formattedRows = grid.map(row => row.join(''));
-
-    return {
-        rows: formattedRows,
-        words: placedWordsInfo
-    };
+  return {
+    rows: formattedRows,
+    words: placedWordsInfo,
+  };
 };
 
-module.exports = { generateWordSearch };
+const getWordSearchByEditionNumber = async (editionNumber) => {
+  console.log(
+    "Searching for word in Word Search Game in Edition #",
+    editionNumber
+  );
+
+  try {
+    const edition = await Edition.findOne({ edition_number: editionNumber })
+      .select("word_search_game")
+      .exec();
+
+    if (!edition) {
+      return null;
+    }
+
+    return edition.word_search_game;
+  } catch (error) {
+    console.error("Error finding word search by edition:", error);
+    throw error;
+  }
+};
+
+module.exports = { generateWordSearch, getWordSearchByEditionNumber };
