@@ -48,11 +48,36 @@ const getEditionsSummary = async (req, res) => {
     }
 };
 
+const getEditionByNumber = async (req, res) => {
+    try {
+        const { edition_number } = req.params;
+
+        if (!edition_number){
+            return res.status(400).json({message: "Edition Number is required"});
+        }
+
+        const editionData = await editionService.getEditionByNumber(edition_number);
+
+        if (!editionData) {
+            return res.status(404).json({ message: "Edition not found" });
+        }
+
+        res.status(200).json(editionData)
+
+    } catch (error) {
+        console.error("Error getting Edition from DB:", error);
+        res.status(500).json({ message: "Internal error" });
+    }
+}
+
+
+
 
 
 module.exports = {
     getLatestEdition,
     fetchAndSaveEdition,
-    getEditionsSummary
+    getEditionsSummary,
+    getEditionByNumber
 };
 

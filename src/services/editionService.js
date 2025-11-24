@@ -75,7 +75,27 @@ const getAllEditionsSummary = async () => {
     }
 };
 
+const getEditionByNumber = async (editionNumber) => {
+    console.log('Searcing edition #', editionNumber);
+
+    try {
+        const edition = await Edition.findOne({ edition_number: editionNumber })
+            .exec();
+
+        if (!edition){
+            console.log('Editon not found!');
+            return null
+        }
+        return edition;
+
+    } catch (error) {
+        console.error('Error searching the edition: ', editionNumber);
+        throw error;
+    }
+}
 
 
 
-module.exports = {fetchAndSaveEdition, getLatestFromDB, getAllEditionsSummary};
+
+
+module.exports = {fetchAndSaveEdition, getLatestFromDB, getAllEditionsSummary, getEditionByNumber};
