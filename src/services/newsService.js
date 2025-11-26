@@ -1,6 +1,7 @@
 const axios = require("axios");
 const Edition = require('../models/Edition');
 const restrictedWords = require('../data/restrictedWords');
+const { cleanText } = require('../utils/textCleaner');
 
 
 const NEGATIVE_KEYWORDS = [
@@ -63,14 +64,14 @@ const fetchDailyNews = async () => {
 
             return {
 
-            title: article.title,
-            summary: article.description,
+            title: cleanText(article.title),
+            summary: cleanText(article.description),
             cover_image: article.urlToImage,
             date: article.publishedAt,
             author: article.author,
             source: cleanSource,
             link: article.url,
-            description: article.content || article.description,
+            description: cleanText(article.content || article.description),
             language: "pt-br",
             };
         });
