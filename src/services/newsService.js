@@ -1,5 +1,6 @@
 const axios = require("axios");
 const Edition = require('../models/Edition');
+const restrictedWords = require('../data/restrictedWords');
 
 
 const NEGATIVE_KEYWORDS = [
@@ -50,7 +51,13 @@ const fetchDailyNews = async () => {
             article.title && article.title !== "[Removed]" && article.description && !htmlTagRegex.test(article.description)
         );
 
-        return validArticles.map(article => {
+        // Removes article that contains restricted words
+        const finalArticles = validArticles.filter(article => {
+            const contentToCheck = (article.title + " " + article.description).toLowerCase();
+            return !restrictedWords.some(word => contentToCheck.includes(word));
+        });
+
+        return finalArticles.map(article => {
 
             const cleanSource = article.source.name ? article.source.name.split('.')[0] : 'Independente';
 
