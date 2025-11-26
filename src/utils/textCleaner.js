@@ -7,7 +7,7 @@
  */
 const cleanText = (text) => {
     if (!text || typeof text !== 'string') {
-        return text;
+        return '';
     }
 
     let cleanedText = text;
@@ -16,31 +16,31 @@ const cleanText = (text) => {
     cleanedText = cleanedText.replace(/<[^>]+>/g, '');
 
     // Remove markdown formatting
-    // Bold: **text** or __text__
-    cleanedText = cleanedText.replace(/\*\*([^*]+)\*\*/g, '$1');
-    cleanedText = cleanedText.replace(/__([^_]+)__/g, '$1');
+    // Bold: **text** or __text__ (using non-greedy matching)
+    cleanedText = cleanedText.replace(/\*\*(.+?)\*\*/g, '$1');
+    cleanedText = cleanedText.replace(/__(.+?)__/g, '$1');
     
-    // Italic: *text* or _text_
-    cleanedText = cleanedText.replace(/\*([^*]+)\*/g, '$1');
-    cleanedText = cleanedText.replace(/_([^_]+)_/g, '$1');
+    // Italic: *text* or _text_ (using non-greedy matching)
+    cleanedText = cleanedText.replace(/\*(.+?)\*/g, '$1');
+    cleanedText = cleanedText.replace(/_(.+?)_/g, '$1');
     
     // Strikethrough: ~~text~~
-    cleanedText = cleanedText.replace(/~~([^~]+)~~/g, '$1');
+    cleanedText = cleanedText.replace(/~~(.+?)~~/g, '$1');
     
     // Headers: # text, ## text, etc.
     cleanedText = cleanedText.replace(/^#{1,6}\s+/gm, '');
     
-    // Links: [text](url)
-    cleanedText = cleanedText.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+    // Links: [text](url) - handle URLs that may contain parentheses
+    cleanedText = cleanedText.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');
     
-    // Images: ![alt](url)
-    cleanedText = cleanedText.replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1');
+    // Images: ![alt](url) - handle URLs that may contain parentheses
+    cleanedText = cleanedText.replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1');
+    
+    // Code blocks: ```code``` - preserve content (process before inline code)
+    cleanedText = cleanedText.replace(/```(?:\w*\n)?([\s\S]*?)```/g, '$1');
     
     // Inline code: `code`
     cleanedText = cleanedText.replace(/`([^`]+)`/g, '$1');
-    
-    // Code blocks: ```code```
-    cleanedText = cleanedText.replace(/```[\s\S]*?```/g, '');
     
     // Blockquotes: > text
     cleanedText = cleanedText.replace(/^>\s+/gm, '');
