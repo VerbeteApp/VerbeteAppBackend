@@ -12,8 +12,15 @@ const cleanText = (text) => {
 
     let cleanedText = text;
 
-    // Remove HTML tags
-    cleanedText = cleanedText.replace(/<[^>]+>/g, '');
+    // Remove HTML tags (repeat until no more tags found to handle nested/malformed cases)
+    let previousText;
+    do {
+        previousText = cleanedText;
+        cleanedText = cleanedText.replace(/<[^>]*>/g, '');
+    } while (cleanedText !== previousText);
+    
+    // Remove any remaining angle brackets that might be leftover from malformed HTML
+    cleanedText = cleanedText.replace(/[<>]/g, '');
 
     // Remove markdown formatting
     // Bold: **text** or __text__ (using non-greedy matching)
