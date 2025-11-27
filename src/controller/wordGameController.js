@@ -17,6 +17,23 @@ const getDailyWord = async(req, res) => {
 }
 
 
+const getAllWordsFromList = async (req, res) => {
+
+    try {
+        const wordList = await wordGameService.getAllWordsFromList();
+        if (!wordList) {
+            return res.status(404).json({message: 'No word found'});
+        }
+        res.status(200).json(wordList);
+    } catch (error) {
+        console.error("Error trying to get worlist", error)
+        res.status(500).json({ message: "Internal error trying to get worlist" })
+    }
+}
+
+
+
 module.exports = {
-    getDailyWord
+    getDailyWord,
+    getAllWordsFromList
 }

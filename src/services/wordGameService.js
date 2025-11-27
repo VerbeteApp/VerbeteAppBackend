@@ -7,6 +7,15 @@ const fetchDailyWordFromArray = () => {
     return wordList[randomIndex].toUpperCase();
 };
 
+const getAllWordsFromList = () => {
+
+
+
+    return [wordList];
+}
+
+
+
 const getWordFromDB = async () => {
     console.log('Searching latest horoscope in database...');
     try {
@@ -33,5 +42,6 @@ const getWordFromDB = async () => {
 
 module.exports = {
     fetchDailyWordFromArray,
+    getAllWordsFromList,
     getWordFromDB
 };
