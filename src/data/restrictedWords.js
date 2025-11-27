@@ -23,7 +23,7 @@ const restrictedWords = [
     "guerra", "conflito", "terrorismo", "bomba", "milícia", "facção", "latrocínio",
     "homicídio", "armas", "tiro", "suspeito", "réu", "denúncia", "inquérito", "investigação",
     "violência", "agressão", "assaltante", "bandido", "marginal", "crime", "criminoso",
-    "pedofilia", "pena de morte", "ladrão", "sequestrador",
+    "pedofilia", "pena de morte", "ladrão", "sequestrador", "canibalismo", 
 
     // 4. Desastres, Acidentes e Tragédias
     "chuva", "tempestade", "furacão", "ciclone", "tornado", "deslizamento", "enchente",
