@@ -15,7 +15,7 @@ const restrictedWords = [
     "congresso", "senado", "parlamento", "stf", "tse", "câmara", "assembleia", "tribunal",
     "partido", "oposição", "candidato", "projeto de lei", "reforma", "emenda",
     "impeachment", "votação", "judicialização", "autoridade", "regime", "ditadura",
-    "orçamento", "gabinete", "secretário", "secretária", "bancada", "ideologia",
+    "orçamento", "gabinete", "secretário", "secretária", "bancada", "ideologia", "Trump",
 
     // 3. Crime, Violência e Segurança
     "assassinato", "roubo", "furto", "sequestro", "tráfico", "drogas", "abuso", "estupro",
@@ -23,7 +23,8 @@ const restrictedWords = [
     "guerra", "conflito", "terrorismo", "bomba", "milícia", "facção", "latrocínio",
     "homicídio", "armas", "tiro", "suspeito", "réu", "denúncia", "inquérito", "investigação",
     "violência", "agressão", "assaltante", "bandido", "marginal", "crime", "criminoso",
-    "pedofilia", "pena de morte", "ladrão", "sequestrador", "canibalismo", "Israel", 
+    "pedofilia", "pena de morte", "ladrão", "sequestrador", "canibalismo", "Israel", "fuzil",
+    "fuzis",
 
     // 4. Desastres, Acidentes e Tragédias
     "chuva", "tempestade", "furacão", "ciclone", "tornado", "deslizamento", "enchente",
@@ -55,7 +56,8 @@ const restrictedWords = [
     "fazenda", "a fazenda", "bbb", "big brother", "celebridade", "fofoca", "famoso",
     "divórcio", "traição", "separação", "escândalo", "polemica", "briga", "processo",
     "exposição", "cancelamento", "humilhação", "tretas", "desabafo", "barraco",
-    "intimidade", "vazou", "vazamento", "paparazzi", "amante", "tiktoker", "Jade Picon",
+    "intimidade", "vazou", "vazamento", "paparazzi", "amante", "tiktoker", "Jade Picon", "Bruna Marquezine",
+    "Neymar Jr",
     
 
     // 9. Conteúdo Explícito e Sensacionalista
@@ -70,6 +72,10 @@ const restrictedWords = [
     // 11. Eventos de Lazer Típicos de Manchetes (e Esportes de Aposta/Risco)
     "carnaval", "festival", "show", "concertos", "balada", "brasileirão", "enem",
     "horoscopo", "signo", "signos", "horóscopo",
+
+    //12. Palavras aleatórias
+    "promoção", 
+
 ];
 
 // Exporta a lista em minúsculas

@@ -97,7 +97,7 @@ const fetchDailyNews = async () => {
                 description: cleanText(article.content || article.description),
                 language: "pt-br",
             };
-        }).slice(0,20);
+        }).slice(0,30);
     } catch (error) {
         console.error("Error fetching news: ", error.message || error);
         return [];

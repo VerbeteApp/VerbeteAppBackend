@@ -8,7 +8,9 @@ const DEFAULT_BLACKLIST = [
   'EDIVALDOBRITO',
   'Sapo',
   "PYPI",
-  "Expresso"
+  "Expresso",
+  "SLICKDEALS",
+  "OBSERVADOR"
 ];
 
 // Normaliza nome da fonte: lower, remove subdomínios e terminação de domínio
