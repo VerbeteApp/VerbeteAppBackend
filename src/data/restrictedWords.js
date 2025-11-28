@@ -23,14 +23,14 @@ const restrictedWords = [
     "guerra", "conflito", "terrorismo", "bomba", "milícia", "facção", "latrocínio",
     "homicídio", "armas", "tiro", "suspeito", "réu", "denúncia", "inquérito", "investigação",
     "violência", "agressão", "assaltante", "bandido", "marginal", "crime", "criminoso",
-    "pedofilia", "pena de morte", "ladrão", "sequestrador", "canibalismo", 
+    "pedofilia", "pena de morte", "ladrão", "sequestrador", "canibalismo", "Israel", 
 
     // 4. Desastres, Acidentes e Tragédias
     "chuva", "tempestade", "furacão", "ciclone", "tornado", "deslizamento", "enchente",
     "incêndio", "seca", "erupção", "terremoto", "desmoronamento", "colapso", "tragédia",
     "desastre", "acidente", "fatalidade", "feridos", "vítimas", "mortos", "destruição",
     "dano", "vazamento", "naufrágio", "queda", "batida", "poluição", "contaminação",
-    "ambiental", "desperdício",
+    "ambiental", "desperdício", "fatal", "vítima",
 
     // 5. Saúde, Doenças e Condições Negativas
     "pandemia", "epidemia", "vírus", "câncer", "doença", "morte", "internação", "uti",
@@ -46,7 +46,8 @@ const restrictedWords = [
     "racismo", "racista", "discriminação", "discriminacao", "aborto", "eutanásia",
     "sexualidade", "gênero", "lgbtqia+", "maioridade penal", "cotas", "religião",
     "assédio", "preconceito", "homofobia", "transfobia", "machismo", "feminicídio",
-    "intolerância", "minorias", "ética", "moral", "tabu", "disputa",
+    "intolerância", "minorias", "ética", "moral", "tabu", "disputa", "xenofobia",
+    "xenofóbico", "xenofóbica",
 
     // 8. Famosos, Celebridades, Fofoca e Entretenimento de Massa
     "virginia", "witzi", "whindersson", "nunes", "carlinhos", "maia",
@@ -54,7 +55,8 @@ const restrictedWords = [
     "fazenda", "a fazenda", "bbb", "big brother", "celebridade", "fofoca", "famoso",
     "divórcio", "traição", "separação", "escândalo", "polemica", "briga", "processo",
     "exposição", "cancelamento", "humilhação", "tretas", "desabafo", "barraco",
-    "intimidade", "vazou", "vazamento", "paparazzi", "amante",
+    "intimidade", "vazou", "vazamento", "paparazzi", "amante", "tiktoker", "Jade Picon",
+    
 
     // 9. Conteúdo Explícito e Sensacionalista
     "sexo", "adulto", "vigarista", "farsa", "charlatão", "sensacionalismo",

@@ -12,6 +12,26 @@ const cleanText = (text) => {
 
     let cleanedText = text;
 
+    // Remove BOM and replacement chars (common in scraped/encoded content)
+    cleanedText = cleanedText.replace(/^\uFEFF/, '').replace(/\uFFFD/g, '');
+
+    // Decode common HTML entities (named)
+    cleanedText = cleanedText.replace(/&nbsp;/gi, ' ')
+                             .replace(/&amp;/gi, '&')
+                             .replace(/&quot;/gi, '"')
+                             .replace(/&apos;/gi, "'")
+                             .replace(/&lt;/gi, '<')
+                             .replace(/&gt;/gi, ' ');
+
+    // Decode numeric HTML entities (decimal and hex)
+    cleanedText = cleanedText.replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)));
+    cleanedText = cleanedText.replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
+
+    // Remove API truncation markers like "[+3314 chars]"
+    cleanedText = cleanedText.replace(/\[\+\d+\s*chars\]/gi, '');
+
+
+
     // Remove HTML tags (repeat until no more tags found to handle nested/malformed cases)
     let previousText;
     do {
@@ -62,10 +82,16 @@ const cleanText = (text) => {
     cleanedText = cleanedText.replace(/^[\s]*\d+\.\s+/gm, '');
 
     // Remove special text tags \n, \t, \r (literal backslash sequences)
-    cleanedText = cleanedText.replace(/\\n/g, ' ');
+        cleanedText = cleanedText.replace(/\\n/g, ' ');
     cleanedText = cleanedText.replace(/\\t/g, ' ');
     cleanedText = cleanedText.replace(/\\r/g, ' ');
     
+    // Replace escaped quotes \" and \' with plain quotes
+    cleanedText = cleanedText.replace(/\\"/g, '"').replace(/\\'/g, "'");
+
+    // (Opcional) Remove barras invertidas sobrando (cuidado se você precisa delas)
+    cleanedText = cleanedText.replace(/\\+/g, '');
+
     // Replace actual newlines, tabs, and carriage returns with spaces
     cleanedText = cleanedText.replace(/[\n\t\r]/g, ' ');
 

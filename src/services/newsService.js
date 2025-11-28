@@ -2,7 +2,7 @@ const axios = require("axios");
 const Edition = require('../models/Edition');
 const restrictedWords = require('../data/restrictedWords');
 const { cleanText } = require('../utils/textCleaner');
-
+const { filterArticlesBySource } = require('../utils/sourceBlackList');
 
 const NEGATIVE_KEYWORDS = [
   "morte",
@@ -26,11 +26,16 @@ const NEGATIVE_KEYWORDS = [
   "bola"
 ];
 
+
+       
+
 //FETCH NEWS IN EXTERNAL API
 const fetchDailyNews = async () => {
     const apiKey = process.env.NEWS_API_KEY;
     const excludeQuery = `(${NEGATIVE_KEYWORDS.join(" OR ")})`;
     const htmlTagRegex = /<[^>]+>/;
+
+
 
     console.log("Fetching news...");
 
@@ -43,13 +48,20 @@ const fetchDailyNews = async () => {
             q: `NOT (${excludeQuery})`,
             language: "pt",
             sortBy: "publishedAt",
-            pageSize: 60,
+            pageSize: 100,
             },
         });
 
-        const validArticles = response.data.articles.filter(
+        const articles = (response.data && response.data.articles) ? response.data.articles : [];
+
+
+        const validArticles = articles.filter(
             (article) =>
-            article.title && article.title !== "[Removed]" && article.description && !htmlTagRegex.test(article.description)
+                article &&
+                article.title &&
+                article.title !== "[Removed]" &&
+                article.description &&
+                !htmlTagRegex.test(article.description)
         );
 
         // Removes article that contains restricted words
@@ -58,26 +70,38 @@ const fetchDailyNews = async () => {
             return !restrictedWords.some(word => contentToCheck.includes(word));
         });
 
-        return finalArticles.map(article => {
+        // Remove artigos de fontes bloqueadas usando sua utilitária
+        const allowedArticles = filterArticlesBySource(finalArticles);
 
-            const cleanSource = article.source.name ? article.source.name.split('.')[0] : 'Independente';
+        // Remover artigos com títulos duplicados (mantém apenas o primeiro)
+        const seenTitles = new Set();
+        const uniqueArticles = [];
+        for (const a of allowedArticles) {
+            const titleKey = cleanText(a.title || '').toLowerCase().trim();
+            if (seenTitles.has(titleKey)) continue;
+            seenTitles.add(titleKey);
+            uniqueArticles.push(a);
+        }
+
+        return uniqueArticles.map(article => {
+            const sourceName = article && article.source && (article.source.name || article.source);
+            const cleanSource = sourceName ? String(sourceName).split('.')[0] : 'Independente';
 
             return {
-
-            title: cleanText(article.title),
-            summary: cleanText(article.description),
-            cover_image: article.urlToImage,
-            date: article.publishedAt,
-            author: article.author,
-            source: cleanSource,
-            link: article.url,
-            description: cleanText(article.content || article.description),
-            language: "pt-br",
+                title: cleanText(article.title),
+                summary: cleanText(article.description),
+                cover_image: article.urlToImage,
+                date: article.publishedAt,
+                author: article.author,
+                source: cleanSource,
+                link: article.url,
+                description: cleanText(article.content || article.description),
+                language: "pt-br",
             };
-        });
+        }).slice(0,20);
     } catch (error) {
-    console.error("Error fetching news: ", error.message);
-    return [];
+        console.error("Error fetching news: ", error.message || error);
+        return [];
     }
 };
 
