@@ -40,7 +40,6 @@ const fetchDailyNews = async () => {
     console.log("Fetching news...");
 
     try {
-        //talvez tenha q tirar o ? do final da url
 
         const response = await axios.get("https://newsapi.org/v2/everything?", {
             params: {
