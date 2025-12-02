@@ -3,7 +3,7 @@ const router = express.Router();
 const wordGameController = require('../controller/wordGameController');
 
 router.get('/', wordGameController.getDailyWord)
-router.get('/wordList', wordGameController.getAllWordsFromList)
+router.get('/word-list', wordGameController.getAllWordsFromList)
 
 module.exports = router;
 

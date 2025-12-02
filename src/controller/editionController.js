@@ -1,4 +1,6 @@
 const editionService = require("../services/editionService");
+const Edition = require('../models/Edition');
+
 
 
 //Usa o service de pegar as ultimas edições do banco
@@ -28,7 +30,9 @@ const fetchAndSaveEdition = async (req, res) => {
             return res.status(404).json({ message: "Internal error trying to fetch and save edition" });
         }
 
-        res.status(200).json(latestEdition);
+        const lastEdition = await Edition.findOne().sort({ edition_number: -1 });
+
+        res.status(200).json({message: `Edition #${lastEdition.edition_number} has been successfully created and saved!`});
 
 
     } catch(error) {

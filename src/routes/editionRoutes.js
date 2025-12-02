@@ -6,7 +6,8 @@ const { getLatestEdition, fetchAndSaveEdition, getEditionsSummary, getEditionByN
 //Pegar a edição mais recentes do banco
 router.get('/', getLatestEdition);
 
-router.get('/createAndSaveEdition', fetchAndSaveEdition);
+//Cria uma nova edição
+router.post('/', fetchAndSaveEdition);
 
 router.get('/summarys', getEditionsSummary);
 

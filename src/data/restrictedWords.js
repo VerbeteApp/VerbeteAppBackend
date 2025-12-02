@@ -74,8 +74,8 @@ const restrictedWords = [
     "horoscopo", "signo", "signos", "horóscopo",
 
     //12. Palavras aleatórias
-    "promoção", 
-
+    "promoção", "Neymar Jr", "Neymar", "Vini Jr", "morre", "bet", "apostas", "aposte",
+    "Virginia"
 ];
 
 // Exporta a lista em minúsculas

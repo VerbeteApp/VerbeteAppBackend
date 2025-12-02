@@ -18,8 +18,8 @@ app.use(express.json());
 app.use('/api/edition', editionRouter);
 app.use('/api/horoscope', horoscopeRouter);
 app.use('/api/news', newsRouter);
-app.use('/api/wordGame', wordGameController);
-app.use('/api/wordSearch', wordSearchRouter);
+app.use('/api/word-game', wordGameController);
+app.use('/api/word-search', wordSearchRouter);
 
 
 app.get('/', (req, res) => {
