@@ -1,8 +1,8 @@
 const wordList = require("../data/wordSearchList");
 const Edition = require("../models/Edition");
 
-const gridSize = 12;
-const numWords = 8;
+const gridSize = 8;
+const numWords = 6;
 
 const createEmptyGrid = () => {
   return Array.from({ length: gridSize }, () => Array(gridSize).fill(""));
@@ -25,14 +25,16 @@ const checkPlacement = (grid, word, startX, startY, direction) => {
   let y = startY;
 
   for (let i = 0; i < word.length; i++) {
-    // 1. Verifica Limites (continua igual)
+    const letterToPlace = word[i];
+
     if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) {
       return false;
     }
 
-    // 2. Verifica Colisão (NOVA REGRA: A célula DEVE estar vazia)
-    if (grid[x][y] !== "") {
-      return false; // Se tiver qualquer coisa, rejeita
+    const cellContent = grid[x][y];
+
+    if (cellContent !== "" && cellContent !== letterToPlace) {
+      return false;
     }
 
     x += direction.x;
@@ -65,16 +67,13 @@ const fillEmptyCells = (grid) => {
   }
 };
 
-// --- FUNÇÃO PRINCIPAL ---
 const generateWordSearch = () => {
   const grid = createEmptyGrid();
   const selectedWords = getRandomWords(numWords);
   const placedWordsInfo = [];
 
-  // 1. Sorteia EXATAMENTE 2 índices únicos para serem invertidos
   const indicesToReverse = new Set();
 
-  // Proteção simples caso numWords seja alterado para menos de 2 no futuro
   const targetReversedCount = Math.min(2, selectedWords.length);
 
   while (indicesToReverse.size < targetReversedCount) {
@@ -88,17 +87,13 @@ const generateWordSearch = () => {
     let attempts = 0;
     const maxAttempts = 100;
 
-    // 2. A palavra só é invertida se o índice dela foi sorteado.
-    // REMOVEMOS o "|| Math.random() < 0.3" para garantir o limite de 2.
+   
     const isReversed = indicesToReverse.has(i);
 
     while (!placed && attempts < maxAttempts) {
       const startX = Math.floor(Math.random() * gridSize);
       const startY = Math.floor(Math.random() * gridSize);
-      const baseDirection =
-        DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
-
-      // Se isReversed for true, multiplica por -1 (inverte). Se for false, mantém 1.
+      const baseDirection = DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
       const stepMultiplier = isReversed ? -1 : 1;
 
       const direction = {
