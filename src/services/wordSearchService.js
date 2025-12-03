@@ -34,6 +34,7 @@ const checkPlacement = (grid, word, startX, startY, direction) => {
     const cellContent = grid[x][y];
 
     if (cellContent !== "" && cellContent !== letterToPlace) {
+      console.log(`⚡ Cruzamento validado na letra '${letterToPlace}' em [${x},${y}] para a palavra "${word}"`);
       return false;
     }
 
@@ -73,40 +74,77 @@ const generateWordSearch = () => {
   const placedWordsInfo = [];
 
   const indicesToReverse = new Set();
-
   const targetReversedCount = Math.min(2, selectedWords.length);
-
   while (indicesToReverse.size < targetReversedCount) {
-    const randomIndex = Math.floor(Math.random() * selectedWords.length);
-    indicesToReverse.add(randomIndex);
+    indicesToReverse.add(Math.floor(Math.random() * selectedWords.length));
   }
+
+  const getOccupiedPositions = () => {
+    const positions = [];
+    for (let x = 0; x < gridSize; x++) {
+      for (let y = 0; y < gridSize; y++) {
+        if (grid[x][y] !== "") {
+          positions.push({ x, y, letter: grid[x][y] });
+        }
+      }
+    }
+    return positions;
+  };
 
   for (let i = 0; i < selectedWords.length; i++) {
     const word = selectedWords[i];
     let placed = false;
     let attempts = 0;
-    const maxAttempts = 100;
+    
+    const maxAttempts = 100; 
 
-   
     const isReversed = indicesToReverse.has(i);
+    const stepMultiplier = isReversed ? -1 : 1;
+
+    const occupied = getOccupiedPositions();
 
     while (!placed && attempts < maxAttempts) {
-      const startX = Math.floor(Math.random() * gridSize);
-      const startY = Math.floor(Math.random() * gridSize);
-      const baseDirection = DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
-      const stepMultiplier = isReversed ? -1 : 1;
+      let startX, startY, direction;
+      let tryingIntersection = false;
 
-      const direction = {
-        x: baseDirection.x * stepMultiplier,
-        y: baseDirection.y * stepMultiplier,
-      };
+      if (occupied.length > 0 && attempts < 50) {
+        const randomOccupied = occupied[Math.floor(Math.random() * occupied.length)];
+ 
+        const letterIndexInWord = word.indexOf(randomOccupied.letter);
+
+        if (letterIndexInWord !== -1) {
+          const baseDirection = DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
+          direction = {
+            x: baseDirection.x * stepMultiplier,
+            y: baseDirection.y * stepMultiplier,
+          };
+
+          startX = randomOccupied.x - (direction.x * letterIndexInWord);
+          startY = randomOccupied.y - (direction.y * letterIndexInWord);
+          
+          tryingIntersection = true;
+          
+          direction.name = baseDirection.name; 
+        }
+      }
+
+      if (!tryingIntersection) {
+        startX = Math.floor(Math.random() * gridSize);
+        startY = Math.floor(Math.random() * gridSize);
+        const baseDirection = DIRECTIONS[Math.floor(Math.random() * DIRECTIONS.length)];
+        direction = {
+          x: baseDirection.x * stepMultiplier,
+          y: baseDirection.y * stepMultiplier,
+          name: baseDirection.name 
+        };
+      }
 
       if (checkPlacement(grid, word, startX, startY, direction)) {
         placeWord(grid, word, startX, startY, direction);
 
         placedWordsInfo.push({
           word: word,
-          direction: baseDirection.name,
+          direction: direction.name, 
           initial_pos: [startX, startY],
           is_reversed: isReversed,
         });
@@ -119,10 +157,8 @@ const generateWordSearch = () => {
 
   fillEmptyCells(grid);
 
-  const formattedRows = grid.map((row) => row.join(""));
-
   return {
-    rows: formattedRows,
+    rows: grid.map((row) => row.join("")),
     words: placedWordsInfo,
   };
 };
