@@ -1,17 +1,21 @@
 const fs = require("fs");
 const path = require("path");
+const unidecode = require("unidecode");
 
 let cachedWords = null;
 
 const loadWords = () => {
   if (!cachedWords) {
     const filePath = path.join(__dirname, "palavras-pt-br.txt");
-    cachedWords = fs
+    const words = fs
       .readFileSync(filePath, "utf-8")
       .split("\n")
       .slice(1)
       .filter((word) => word.trim().length > 0)
-      .map((word) => word.toUpperCase().trim());
+      .map((word) => unidecode(word.toUpperCase().trim()));
+    
+    // Remove duplicates using Set
+    cachedWords = [...new Set(words)];
   }
   return cachedWords;
 };
