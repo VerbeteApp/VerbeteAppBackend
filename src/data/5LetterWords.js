@@ -1,4 +1,4 @@
-const words = [
+const curatedList = [
 "ALGOZ", "EXITO", "SAGAZ", "AMAGO", "MEXER", "SENSO", "AFETO", "SUTIL", "CERNE", "MUTUO",
 "AUDAZ", "POREM", "TERMO", "NOBRE", "AQUEM", "IMPIO", "FAZER", "SECAO", "VIGOR", "LAPSO",
 "NEGRO", "IDEIA", "GENRO", "DESDE", "POSSE", "FUTIL", "ATROZ", "RAZAO", "TORPE", "EXPOR",
@@ -293,4 +293,10 @@ const words = [
 "GENRA", "BANCO", "TOTAL"
 ];
 
-module.exports = words;
+const getWords = require("./wordList");
+const completeList = getWords(5, 5) + curatedList;
+
+module.exports = {
+    curatedList,
+    completeList
+};

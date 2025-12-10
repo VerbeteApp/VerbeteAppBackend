@@ -1,20 +1,16 @@
-const wordList = require('../data/5charWordList');
+const curatedWordList = require('../data/5LetterWords').curatedList;
+const completeWordList = require('../data/5LetterWords').curatedList;
 const Edition = require('../models/Edition')
 
 const fetchDailyWordFromArray = () => {
-    const randomIndex = Math.floor(Math.random() * wordList.length);
+    const randomIndex = Math.floor(Math.random() * curatedWordList.length);
 
-    return wordList[randomIndex].toUpperCase();
+    return curatedWordList[randomIndex].toUpperCase();
 };
 
 const getAllWordsFromList = () => {
-
-
-
-    return [wordList];
+    return [completeWordList];
 }
-
-
 
 const getWordFromDB = async () => {
     console.log('Searching latest horoscope in database...');
