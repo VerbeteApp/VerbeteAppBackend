@@ -294,7 +294,7 @@ const curatedList = [
 ];
 
 const getWords = require("./wordList");
-const completeList = getWords(5, 5) + curatedList;
+const completeList = [...getWords(5, 5), ...curatedList];
 
 module.exports = {
     curatedList,
