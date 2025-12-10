@@ -1,5 +1,5 @@
 const curatedWordList = require('../data/5LetterWords').curatedList;
-const completeWordList = require('../data/5LetterWords').curatedList;
+const completeWordList = require('../data/5LetterWords').completeList;
 const Edition = require('../models/Edition')
 
 const fetchDailyWordFromArray = () => {
